@@ -66,10 +66,17 @@ const stats = [
           <div class="about-text">
             <span>Nusantara Tech</span>
           </div>
+<<<<<<< HEAD
           <div class="about-badge">
             <strong>Sejak 2018</strong>
             <span>Melayani transformasi digital Nusantara</span>
           </div>
+=======
+        </div>
+        <div class="about-badge">
+          <strong>Sejak 2019</strong>
+          <span>Melayani transformasi digital Nusantara</span>
+>>>>>>> feature/perbaikan-issue-1-2
         </div>
       </div>
 
