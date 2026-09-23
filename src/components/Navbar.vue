@@ -6,6 +6,7 @@ const { isUnlocked, unlock, handleNavClick } = useAccessControl()
 
 const isScrolled = ref(false)
 const mobileMenuOpen = ref(false)
+const activeSection = ref('')
 
 const navLinks = [
   { label: 'Beranda', href: '#beranda' },
@@ -17,9 +18,24 @@ const navLinks = [
 
 const handleScroll = () => {
   isScrolled.value = window.scrollY > 20
+  updateActiveSection()
+}
+
+const updateActiveSection = () => {
+  let current = ''
+  for (const link of navLinks) {
+    const el = document.querySelector(link.href)
+    if (!el) continue
+    const top = (el as HTMLElement).getBoundingClientRect().top
+    if (top <= 160 && top > -320) {
+      current = link.href
+    }
+  }
+  activeSection.value = current
 }
 
 onMounted(() => {
+  updateActiveSection()
   window.addEventListener('scroll', handleScroll, { passive: true })
 })
 
@@ -31,6 +47,7 @@ const onLinkClick = (e: MouseEvent, href: string) => {
   const allowed = handleNavClick(e, href)
   if (allowed !== false) {
     mobileMenuOpen.value = false
+    activeSection.value = href
   }
 }
 
@@ -66,6 +83,8 @@ const onCtaClick = (e: MouseEvent) => {
             <a
               :href="link.href"
               class="nav-link"
+              :class="{ 'is-active': activeSection === link.href }"
+              :aria-current="activeSection === link.href ? 'true' : undefined"
               @click="(e) => onLinkClick(e, link.href)"
             >
               <span>{{ link.label }}</span>
@@ -247,6 +266,27 @@ const onCtaClick = (e: MouseEvent) => {
 .nav-link:hover {
   color: var(--primary);
   background: rgba(14, 165, 233, 0.08);
+}
+
+.nav-link.is-active {
+  color: var(--primary);
+  background: rgba(14, 165, 233, 0.1);
+  font-weight: 600;
+}
+
+.nav-link.is-active span {
+  position: relative;
+}
+
+.nav-link.is-active span::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
 }
 
 /* Actions */

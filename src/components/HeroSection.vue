@@ -22,6 +22,15 @@ const stats = [
   { value: 98, suffix: '%', label: 'Kepuasan Klien' },
 ]
 
+const trustedBy = [
+  'Majubersama',
+  'FintechNusa',
+  'Edusis',
+  'Pratama Medika',
+  'KilatLog',
+  'FashionForward',
+]
+
 const displayed = ref(stats.map(() => 0))
 const statsEl = ref<HTMLElement | null>(null)
 let observer: IntersectionObserver | null = null
@@ -116,6 +125,15 @@ onBeforeUnmount(() => {
             <dd>{{ stat.label }}</dd>
           </div>
         </dl>
+
+        <div class="hero-trusted">
+          <span class="trusted-label">Dipercaya oleh tim teknologi di</span>
+          <div class="trusted-logos" aria-label="Nama-nama klien">
+            <span v-for="name in trustedBy" :key="name" class="trusted-logo">
+              {{ name }}
+            </span>
+          </div>
+        </div>
       </div>
 
       <div class="hero-visual" aria-hidden="true">
@@ -295,6 +313,47 @@ onBeforeUnmount(() => {
   margin: 2px 0 0;
   font-size: 0.85rem;
   color: var(--muted);
+}
+
+.hero-trusted {
+  margin-top: 34px;
+  padding-top: 22px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+
+.trusted-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.trusted-logos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 20px;
+}
+
+.trusted-logo {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  opacity: 0.55;
+  white-space: nowrap;
+  transition: opacity 0.25s ease, color 0.25s ease;
+}
+
+.trusted-logo:hover {
+  opacity: 1;
+  color: var(--primary);
 }
 
 .hero-visual {
