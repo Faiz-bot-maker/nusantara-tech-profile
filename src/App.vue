@@ -1,7 +1,11 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+import HeroSection from './components/HeroSection.vue'
+import AboutSection from './components/AboutSection.vue'
+import VisionMissionSection from './components/VisionMissionSection.vue'
 </script>
 
 <template>
-  <HelloWorld />
+  <HeroSection />
+  <AboutSection />
+  <VisionMissionSection />
 </template>
