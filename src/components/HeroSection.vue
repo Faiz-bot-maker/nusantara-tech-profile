@@ -1,5 +1,19 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { useAccessControl } from '../composables/useAccessControl'
+
+const { isUnlocked, unlock } = useAccessControl()
+
+function onCollaborateClick() {
+  unlock('#tentang')
+}
+
+function onLearnMoreClick(e: MouseEvent) {
+  if (!isUnlocked.value) {
+    e.preventDefault()
+    unlock('#tentang')
+  }
+}
 
 const stats = [
   { value: 120, suffix: '+', label: 'Proyek Selesai' },
@@ -51,7 +65,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <section id="beranda" class="hero">
+  <section id="beranda" class="hero" :class="{ 'is-landing-fullscreen': !isUnlocked }">
     <div class="container hero-grid">
       <div class="hero-copy">
         <span class="hero-badge">
@@ -76,14 +90,24 @@ onBeforeUnmount(() => {
         </p>
 
         <div class="hero-actions">
-          <a class="btn btn-primary" href="#visi-misi">
+          <button
+            type="button"
+            class="btn btn-primary hero-unlock-btn"
+            @click="onCollaborateClick"
+          >
             Mulai Berkolaborasi
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M5 12h14" />
               <path d="m12 5 7 7-7 7" />
             </svg>
+          </button>
+          <a
+            class="btn btn-secondary"
+            href="#tentang"
+            @click="onLearnMoreClick"
+          >
+            Pelajari Lebih Jauh
           </a>
-          <a class="btn btn-secondary" href="#tentang">Pelajari Lebih Jauh</a>
         </div>
 
         <dl ref="statsEl" class="hero-stats">
@@ -160,6 +184,16 @@ onBeforeUnmount(() => {
   padding: 88px 0 0;
   background: linear-gradient(180deg, #f0f9ff 0%, #ffffff 92%);
   border-bottom: 1px solid var(--border);
+  transition: min-height 0.4s ease, padding 0.4s ease;
+}
+
+.hero.is-landing-fullscreen {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  padding: clamp(24px, 4vh, 48px) 0;
+  border-bottom: none;
 }
 
 .hero-grid {
@@ -346,6 +380,22 @@ onBeforeUnmount(() => {
   .hero-stats {
     grid-template-columns: repeat(2, 1fr);
   }
+}
+
+.hero-unlock-btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pulse-attention {
+  animation: shakeAndGlow 0.8s ease-in-out !important;
+}
+
+@keyframes shakeAndGlow {
+  0%, 100% { transform: scale(1) translateX(0); }
+  20%, 60% { transform: scale(1.04) translateX(-5px); box-shadow: 0 0 20px rgba(249, 115, 22, 0.6); }
+  40%, 80% { transform: scale(1.04) translateX(5px); box-shadow: 0 0 20px rgba(249, 115, 22, 0.6); }
 }
 
 @media (prefers-reduced-motion: reduce) {
