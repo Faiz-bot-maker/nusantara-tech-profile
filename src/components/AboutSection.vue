@@ -38,7 +38,7 @@ const values = [
           </div>
         </div>
         <div class="about-badge">
-          <strong>Sejak 2018</strong>
+          <strong>Sejak 2019</strong>
           <span>Melayani transformasi digital Nusantara</span>
         </div>
       </div>
