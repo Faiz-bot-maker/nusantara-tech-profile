@@ -5,6 +5,7 @@ import HeroSection from './components/HeroSection.vue'
 import AboutSection from './components/AboutSection.vue'
 import VisionMissionSection from './components/VisionMissionSection.vue'
 import ServicesSection from './components/ServicesSection.vue'
+import TestimoniSection from './components/TestimoniSection.vue'
 import ContactSection from './components/ContactSection.vue'
 import FooterSection from './components/FooterSection.vue'
 import { useAccessControl } from './composables/useAccessControl'
@@ -53,6 +54,7 @@ onBeforeUnmount(() => {
           <AboutSection />
           <VisionMissionSection />
           <ServicesSection />
+          <TestimoniSection />
           <ContactSection />
         </div>
       </transition>
