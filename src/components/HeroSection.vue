@@ -200,7 +200,7 @@ onBeforeUnmount(() => {
 .hero {
   position: relative;
   padding: 88px 0 0;
-  background: linear-gradient(180deg, #f0f9ff 0%, #ffffff 92%);
+  background: linear-gradient(180deg, var(--bg-soft) 0%, var(--bg) 92%);
   border-bottom: 1px solid var(--border);
   transition: min-height 0.4s ease, padding 0.4s ease;
 }
