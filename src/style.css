@@ -13,6 +13,8 @@
   --border: #e0eef7;
   --shadow: 0 18px 40px -18px rgba(2, 132, 199, 0.28);
   --shadow-lg: 0 30px 70px -30px rgba(2, 132, 199, 0.45);
+  --navbar-bg: rgba(255, 255, 255, 0.88);
+  --navbar-border: rgba(224, 238, 247, 0.7);
   --font-body: 'Work Sans', system-ui, 'Segoe UI', Roboto, sans-serif;
   --font-heading: 'Outfit', system-ui, 'Segoe UI', Roboto, sans-serif;
 
@@ -27,7 +29,8 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root,
+  :root[data-theme='dark'] {
     --bg: #0b1220;
     --bg-soft: #0e1a2b;
     --surface: #111c2e;
@@ -36,7 +39,22 @@
     --muted: #7d93a8;
     --border: #22334a;
     --shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.6);
+    --navbar-bg: rgba(11, 18, 32, 0.88);
+    --navbar-border: rgba(34, 51, 74, 0.7);
   }
+}
+
+:root[data-theme='light'] {
+  --bg: #ffffff;
+  --bg-soft: #f0f9ff;
+  --surface: #ffffff;
+  --heading: #0c4a6e;
+  --text: #3f5a73;
+  --muted: #475569;
+  --border: #e0eef7;
+  --shadow: 0 18px 40px -18px rgba(2, 132, 199, 0.28);
+  --navbar-bg: rgba(255, 255, 255, 0.88);
+  --navbar-border: rgba(224, 238, 247, 0.7);
 }
 
 *,
@@ -47,6 +65,7 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 96px;
 }
 
 body {
