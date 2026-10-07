@@ -6,8 +6,11 @@ import AboutSection from './components/AboutSection.vue'
 import VisionMissionSection from './components/VisionMissionSection.vue'
 import ServicesSection from './components/ServicesSection.vue'
 import TestimoniSection from './components/TestimoniSection.vue'
+import FaqSection from './components/FaqSection.vue'
 import ContactSection from './components/ContactSection.vue'
 import FooterSection from './components/FooterSection.vue'
+import ScrollProgressBar from './components/ScrollProgressBar.vue'
+import BackToTop from './components/BackToTop.vue'
 import { useAccessControl } from './composables/useAccessControl'
 
 const { isUnlocked } = useAccessControl()
@@ -39,6 +42,9 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="app-wrapper" :class="{ 'is-locked-view': !isUnlocked }">
+    <!-- Scroll Progress Bar di paling atas halaman -->
+    <ScrollProgressBar v-if="isUnlocked" />
+
     <!-- Navbar Header: Tersembunyi sebelum masuk (muncul setelah tombol berkolaborasi ditekan) -->
     <transition name="nav-slide">
       <Navbar v-if="isUnlocked" />
@@ -55,6 +61,7 @@ onBeforeUnmount(() => {
           <VisionMissionSection />
           <ServicesSection />
           <TestimoniSection />
+          <FaqSection />
           <ContactSection />
         </div>
       </transition>
@@ -62,6 +69,9 @@ onBeforeUnmount(() => {
 
     <!-- Footer: Hanya muncul setelah masuk ke menu lainnya -->
     <FooterSection v-if="isUnlocked" />
+
+    <!-- Tombol Mengambang Kembali ke Atas -->
+    <BackToTop v-if="isUnlocked" />
   </div>
 </template>
 

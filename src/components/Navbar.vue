@@ -12,6 +12,7 @@ const navLinks = [
   { label: 'Tentang Kami', href: '#tentang' },
   { label: 'Visi & Misi', href: '#visi-misi' },
   { label: 'Layanan', href: '#layanan' },
+  { label: 'FAQ', href: '#faq' },
   { label: 'Kontak', href: '#kontak' },
 ]
 
