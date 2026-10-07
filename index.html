@@ -1,18 +1,52 @@
 <!doctype html>
-<html lang="en">
+<html lang="id">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0ea5e9" />
     <meta
       name="description"
-      content="Nusantara Tech - Solusi teknologi untuk mempercepat transformasi digital bisnis Indonesia."
+      content="Nusantara Tech - Solusi teknologi untuk mempercepat transformasi digital bisnis Indonesia. Web, mobile, cloud, AI, dan keamanan siber."
     />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="id_ID" />
+    <meta property="og:title" content="Nusantara Tech - Profil Perusahaan" />
+    <meta
+      property="og:description"
+      content="Mitra rekayasa teknologi dan transformasi digital terpercaya bagi bisnis modern di Indonesia dan Asia Tenggara."
+    />
+    <meta property="og:url" content="https://nusantara-tech-profile.vercel.app/" />
+    <meta property="og:site_name" content="Nusantara Tech" />
+    <meta property="og:image" content="https://nusantara-tech-profile.vercel.app/favicon.svg" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Nusantara Tech - Profil Perusahaan" />
+    <meta
+      name="twitter:description"
+      content="Mitra rekayasa teknologi dan transformasi digital terpercaya bagi bisnis modern di Indonesia dan Asia Tenggara."
+    />
+    <meta name="twitter:image" content="https://nusantara-tech-profile.vercel.app/favicon.svg" />
+
     <title>Nusantara Tech - Profil Perusahaan</title>
+    <script>
+      ;(function () {
+        try {
+          var t = localStorage.getItem('nt-theme')
+          if (!t) {
+            t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+          }
+          document.documentElement.dataset.theme = t
+        } catch (err) {}
+      })()
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Work+Sans:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
   </head>

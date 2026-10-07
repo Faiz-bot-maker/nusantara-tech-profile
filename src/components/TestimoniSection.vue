@@ -87,6 +87,19 @@ const testimonials: Testimonial[] = [
 const currentIndex = ref(0)
 let autoTimer: ReturnType<typeof setInterval> | null = null
 
+const avatarGradients = [
+  'linear-gradient(135deg, #0ea5e9, #22d3ee)',
+  'linear-gradient(135deg, #6366f1, #8b5cf6)',
+  'linear-gradient(135deg, #f59e0b, #f97316)',
+  'linear-gradient(135deg, #10b981, #14b8a6)',
+  'linear-gradient(135deg, #ef4444, #f97316)',
+  'linear-gradient(135deg, #8b5cf6, #ec4899)',
+]
+
+function avatarStyle(seed: number) {
+  return { background: avatarGradients[seed % avatarGradients.length] }
+}
+
 function goTo(index: number) {
   currentIndex.value = (index + testimonials.length) % testimonials.length
 }
@@ -128,6 +141,16 @@ onBeforeUnmount(() => stopAuto())
           Lebih dari 120+ perusahaan dari berbagai industri telah mempercayakan transformasi
           digital mereka kepada kami. Inilah yang mereka katakan.
         </p>
+
+        <div class="rating-summary">
+          <div class="rating-stars" aria-hidden="true">
+            <svg v-for="i in 5" :key="i" viewBox="0 0 24 24" fill="currentColor" class="rating-star">
+              <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 0 0 .95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 0 0-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 0 0-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 0 0-.363-1.118L4.08 9.96c-.783-.57-.38-1.81.589-1.81h4.914a1 1 0 0 0 .951-.69l1.519-4.674z" />
+            </svg>
+          </div>
+          <strong class="rating-score">4.9/5</strong>
+          <span class="rating-note">dari 120+ klien selama 8 tahun</span>
+        </div>
       </div>
 
       <div
@@ -135,6 +158,8 @@ onBeforeUnmount(() => stopAuto())
         :ref="bind"
         @mouseenter="stopAuto"
         @mouseleave="startAuto"
+        @focusin="stopAuto"
+        @focusout="startAuto"
       >
         <div class="carousel-track">
           <transition name="slide-fade" mode="out-in">
@@ -165,7 +190,7 @@ onBeforeUnmount(() => stopAuto())
               </blockquote>
 
               <div class="testi-author">
-                <div class="author-avatar">{{ testimonials[currentIndex].avatar }}</div>
+                <div class="author-avatar" :style="avatarStyle(currentIndex)">{{ testimonials[currentIndex].avatar }}</div>
                 <div class="author-info">
                   <strong class="author-name">{{ testimonials[currentIndex].name }}</strong>
                   <span class="author-role">{{ testimonials[currentIndex].role }}, {{ testimonials[currentIndex].company }}</span>
@@ -211,6 +236,7 @@ onBeforeUnmount(() => stopAuto())
           type="button"
           class="strip-avatar"
           :class="{ 'is-active': i === currentIndex }"
+          :style="avatarStyle(i)"
           :title="t.name"
           :aria-label="`Lihat testimoni dari ${t.name}`"
           @click="goTo(i); startAuto()"
@@ -258,6 +284,41 @@ onBeforeUnmount(() => stopAuto())
   text-align: center;
   max-width: 640px;
   margin: 0 auto 56px;
+}
+
+.rating-summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 26px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.rating-stars {
+  display: flex;
+  gap: 2px;
+}
+
+.rating-star {
+  width: 17px;
+  height: 17px;
+  color: #f59e0b;
+}
+
+.rating-score {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--heading);
+}
+
+.rating-note {
+  font-size: 0.84rem;
+  color: var(--muted);
 }
 
 .carousel-wrapper {

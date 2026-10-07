@@ -11,6 +11,7 @@ import ContactSection from './components/ContactSection.vue'
 import FooterSection from './components/FooterSection.vue'
 import ScrollProgressBar from './components/ScrollProgressBar.vue'
 import BackToTop from './components/BackToTop.vue'
+import NoticeToast from './components/NoticeToast.vue'
 import { useAccessControl } from './composables/useAccessControl'
 
 const { isUnlocked } = useAccessControl()
@@ -73,6 +74,9 @@ onBeforeUnmount(() => {
     <!-- Tombol Mengambang Kembali ke Atas -->
     <BackToTop v-if="isUnlocked" />
   </div>
+
+  <!-- Notifikasi global (toast) -->
+  <NoticeToast />
 </template>
 
 <style scoped>

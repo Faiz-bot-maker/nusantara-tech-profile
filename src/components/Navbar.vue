@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useAccessControl } from '../composables/useAccessControl'
+import { useThemeMode } from '../composables/useThemeMode'
 
 const { isUnlocked, unlock, handleNavClick } = useAccessControl()
+const { theme, toggleTheme } = useThemeMode()
 
 const isScrolled = ref(false)
 const mobileMenuOpen = ref(false)
+const activeSection = ref('')
 
 const navLinks = [
   { label: 'Beranda', href: '#beranda' },
@@ -18,9 +21,24 @@ const navLinks = [
 
 const handleScroll = () => {
   isScrolled.value = window.scrollY > 20
+  updateActiveSection()
+}
+
+const updateActiveSection = () => {
+  let current = ''
+  for (const link of navLinks) {
+    const el = document.querySelector(link.href)
+    if (!el) continue
+    const top = (el as HTMLElement).getBoundingClientRect().top
+    if (top <= 160 && top > -320) {
+      current = link.href
+    }
+  }
+  activeSection.value = current
 }
 
 onMounted(() => {
+  updateActiveSection()
   window.addEventListener('scroll', handleScroll, { passive: true })
 })
 
@@ -32,6 +50,7 @@ const onLinkClick = (e: MouseEvent, href: string) => {
   const allowed = handleNavClick(e, href)
   if (allowed !== false) {
     mobileMenuOpen.value = false
+    activeSection.value = href
   }
 }
 
@@ -67,6 +86,8 @@ const onCtaClick = (e: MouseEvent) => {
             <a
               :href="link.href"
               class="nav-link"
+              :class="{ 'is-active': activeSection === link.href }"
+              :aria-current="activeSection === link.href ? 'true' : undefined"
               @click="(e) => onLinkClick(e, link.href)"
             >
               <span>{{ link.label }}</span>
@@ -77,6 +98,23 @@ const onCtaClick = (e: MouseEvent) => {
 
       <!-- Action Button -->
       <div class="navbar-actions">
+        <!-- Theme Toggle -->
+        <button
+          type="button"
+          class="theme-toggle"
+          :aria-label="theme === 'dark' ? 'Aktifkan mode terang' : 'Aktifkan mode gelap'"
+          :title="theme === 'dark' ? 'Mode terang' : 'Mode gelap'"
+          @click="toggleTheme"
+        >
+          <svg v-if="theme === 'dark'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4" />
+            <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+          </svg>
+          <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+          </svg>
+        </button>
+
         <a
           href="#kontak"
           class="btn-nav btn-cta"
@@ -149,18 +187,11 @@ const onCtaClick = (e: MouseEvent) => {
   left: 0;
   right: 0;
   z-index: 1000;
-  background: rgba(255, 255, 255, 0.88);
+  background: var(--navbar-bg);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(224, 238, 247, 0.7);
-  transition: all 0.3s ease;
-}
-
-@media (prefers-color-scheme: dark) {
-  .navbar {
-    background: rgba(11, 18, 32, 0.88);
-    border-bottom-color: rgba(34, 51, 74, 0.7);
-  }
+  border-bottom: 1px solid var(--navbar-border);
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .navbar.is-scrolled {
@@ -250,11 +281,56 @@ const onCtaClick = (e: MouseEvent) => {
   background: rgba(14, 165, 233, 0.08);
 }
 
+.nav-link.is-active {
+  color: var(--primary);
+  background: rgba(14, 165, 233, 0.1);
+  font-weight: 600;
+}
+
+.nav-link.is-active span {
+  position: relative;
+}
+
+.nav-link.is-active span::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+}
+
 /* Actions */
 .navbar-actions {
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+.theme-toggle {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--heading);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.theme-toggle svg {
+  width: 20px;
+  height: 20px;
+}
+
+.theme-toggle:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-1px);
 }
 
 .btn-nav {
