@@ -79,6 +79,7 @@ const scrollToTop = () => {
             <li><a href="#tentang" @click="(e) => handleNavClick(e, '#tentang')">Tentang Kami</a></li>
             <li><a href="#visi-misi" @click="(e) => handleNavClick(e, '#visi-misi')">Visi &amp; Misi</a></li>
             <li><a href="#layanan" @click="(e) => handleNavClick(e, '#layanan')">Layanan Perusahaan</a></li>
+            <li><a href="#faq" @click="(e) => handleNavClick(e, '#faq')">FAQ / Tanya Jawab</a></li>
             <li><a href="#kontak" @click="(e) => handleNavClick(e, '#kontak')">Hubungi Kami</a></li>
           </ul>
         </div>

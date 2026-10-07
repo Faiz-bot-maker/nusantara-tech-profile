@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useReveal } from '../composables/useReveal'
 
 const { bind } = useReveal()
@@ -45,15 +45,65 @@ const extraParagraphs = [
 ]
 
 const stats = [
-  { num: '150+', label: 'Proyek Selesai' },
-  { num: '80+', label: 'Klien Aktif' },
-  { num: '120+', label: 'Talenta Digital' },
-  { num: '8 Tahun', label: 'Pengalaman Industri' },
+  { value: 150, suffix: '+', label: 'Proyek Selesai' },
+  { value: 80, suffix: '+', label: 'Klien Aktif' },
+  { value: 120, suffix: '+', label: 'Talenta Digital' },
+  { value: 8, suffix: ' Tahun', label: 'Pengalaman Industri' },
 ]
+
+const displayed = ref(stats.map(() => 0))
+const aboutSectionRef = ref<HTMLElement | null>(null)
+let observer: IntersectionObserver | null = null
+let raf = 0
+let hasAnimated = false
+
+function runCountUp() {
+  if (hasAnimated) return
+  hasAnimated = true
+  const start = performance.now()
+  const duration = 1400
+  const tick = (now: number) => {
+    const progress = Math.min((now - start) / duration, 1)
+    const eased = 1 - Math.pow(1 - progress, 3)
+    displayed.value = stats.map((s) => Math.round(s.value * eased))
+    if (progress < 1) raf = requestAnimationFrame(tick)
+  }
+  raf = requestAnimationFrame(tick)
+}
+
+watch(isExpanded, (expanded) => {
+  if (expanded) {
+    runCountUp()
+  }
+})
+
+onMounted(() => {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    displayed.value = stats.map((s) => s.value)
+    return
+  }
+  observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          runCountUp()
+          observer?.disconnect()
+        }
+      })
+    },
+    { threshold: 0.15 },
+  )
+  if (aboutSectionRef.value) observer.observe(aboutSectionRef.value)
+})
+
+onBeforeUnmount(() => {
+  observer?.disconnect()
+  cancelAnimationFrame(raf)
+})
 </script>
 
 <template>
-  <section id="tentang" class="about">
+  <section id="tentang" ref="aboutSectionRef" class="about">
     <div class="container about-grid">
       <div class="about-visual reveal" :ref="bind" aria-hidden="true">
         <div class="about-panel">
@@ -66,10 +116,10 @@ const stats = [
           <div class="about-text">
             <span>Nusantara Tech</span>
           </div>
-          <div class="about-badge">
-            <strong>Sejak 2018</strong>
-            <span>Melayani transformasi digital Nusantara</span>
-          </div>
+        </div>
+        <div class="about-badge">
+          <strong>Sejak 2018</strong>
+          <span>Melayani transformasi digital Nusantara</span>
         </div>
       </div>
 
@@ -130,12 +180,12 @@ const stats = [
 
             <div class="about-stats">
               <div
-                v-for="stat in stats"
+                v-for="(stat, i) in stats"
                 :key="stat.label"
                 class="about-stat reveal"
                 :ref="bind"
               >
-                <strong>{{ stat.num }}</strong>
+                <strong>{{ displayed[i] }}{{ stat.suffix }}</strong>
                 <span>{{ stat.label }}</span>
               </div>
             </div>
@@ -409,6 +459,7 @@ const stats = [
   font-weight: 800;
   line-height: 1.15;
   color: var(--primary);
+  font-variant-numeric: tabular-nums;
 }
 
 .about-stat span {
